@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="teamwork_form" model="ir.ui.view">
+        <field name="name">teamwork.form</field>
+        <field name="model">teamwork</field>
+        <field name="arch" type="xml">
+            <form string="TEAMWORK INTEGRATION">
+                <sheet string="Project">
+                    <div>
+                        <h1 class="d-flex flex-row">
+                            Teamwork Integration
+                        </h1>
+                        <group string="Main function"/>
+                        <div class="oe_inline">
+                            <button name="run_teamwork_cron_manually" string="Get Data From Teamwork" type="object" class="oe_highlight"/>
+                        </div>
+                        <group string="Step by Step">
+
+                        </group>
+                        <div string="Step by Step" class="oe_inline">
+                            <span style="font-weight:bold;font-size:25px;">1. </span><button name="get_tags" string="Get Tags" type="object" class="oe_highlight"/><br/>
+                            <span style="font-weight:bold;font-size:25px;"> 2. </span><button name="get_companies" string="Get Companies" type="object" class="oe_highlight"/><br/>
+                            <span style="font-weight:bold;font-size:25px;"> 3. </span><button name="get_projects" string="Get Projects" type="object" class="oe_highlight"/><br/>
+                            <span style="font-weight:bold;font-size:25px;"> 4. </span><button name="get_people" string="Get People" type="object" class="oe_highlight"/><br/>
+                            <span style="font-weight:bold;font-size:25px;"> 5. </span><button name="get_timesheets" string="Get Timesheets" type="object" class="oe_highlight"/>
+                        </div>
+
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="open_view_teamwork" model="ir.actions.act_window">
+        <field name="name">Teamwork</field>
+        <field name="res_model">teamwork</field>
+        <field name="view_mode">form</field>
+        <field name="id">15</field>
+    </record>
+
+    <record id="teamwork_server_action" model="ir.actions.server">
+        <field name="name">Teamwork Server Action</field>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+        <field name="model_id" ref="DELETED_MODULE_NAME.model_teamwork"/>
+        <!--        <field name="binding_model_id" ref="product.model_product_product"/>-->
+        <field name="state">code</field>
+        <field name="code">
+record_name = 'Manual Records Update'
+record = env['teamwork'].search([('name', '=', record_name)])
+action = {
+'type': 'ir.actions.act_window',
+'view_mode': 'form',
+'res_model': 'teamwork',
+'res_id': record.id,
+'target': 'current',
+}
+        </field>
+    </record>
+
+
+    <menuitem
+            name="Teamwork"
+            id="menu_main_teamwork"
+            groups="base.group_system"
+            web_icon="DELETED_MODULE_NAME,static/description/teamwork.png"
+            sequence="70"
+            action="teamwork_server_action"
+    />
+
+</odoo>
